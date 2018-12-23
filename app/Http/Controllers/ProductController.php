@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Model\Product;
+
+use App\Http\Resources\Product\ProductCollection;
+use App\Http\Resources\Product\ProductResource;
+use App\Http\Requests\StoreProduct;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,7 +18,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+       // return Product::all();
+
+       //return ProductResource::collection(Product::all());
+
+         return ProductResource::collection(Product::all());
     }
 
     /**
@@ -33,9 +41,33 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProduct $request)
     {
-        //
+
+        try { 
+
+            $product = new Product;
+            $product->name = $request->name;
+            $product->detail = $request->description;
+            $product->stock = $request->stock;
+            $product->user_id = $request->user_id;
+            $product->category_id = $request->category_id;
+            $product->price = $request->price;
+            $product->discount = $request->discount;
+            $product->save();
+            return response([
+                'data' => new ProductResource($product)
+            ],201);
+
+
+        }catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+      
     }
 
     /**
@@ -46,7 +78,19 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+
+        try { 
+
+          return new ProductResource($product);
+
+        }catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+       
+
     }
 
     /**
@@ -69,7 +113,24 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+
+        try { 
+
+            $request['detail'] = $request->description;
+             unset($request['description']);
+            $product->update($request->all());
+            return response([
+                'data' => new ProductResource($product)
+            ],201);
+
+        }catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+       
+
     }
 
     /**
@@ -80,6 +141,18 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        try { 
+
+            $product->delete();
+            return response(null,204);
+
+        }catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        
     }
 }
