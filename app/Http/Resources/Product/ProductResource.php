@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\ProductImagesResource;
 
 class ProductResource extends JsonResource
 {
@@ -20,6 +21,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'description' => $this->detail,
             'price' => $this->price,
+            'product_image' =>ProductImagesResource::collection($this->product_image),
             'stock' => $this->stock == 0 ? 'Out of Stock' : $this->stock,
             'discount' =>$this->discount,
             'totalPrice' => round(( 1 - ($this->discount/100)) * $this->price,2),

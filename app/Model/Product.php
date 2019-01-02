@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Model\Review;
 use App\Model\Category;
+use App\Model\Product_image;
 use App\User;
 
 use Illuminate\Database\Eloquent\Model;
@@ -33,12 +34,21 @@ class Product extends Model
     {
     	return $this->belongTo(User::class); 
     }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function categories()
     {
-    	return $this->belongTo(Category::class); 
+        return $this->belongTo(Category::class); 
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function product_image()
+    {
+    	return $this->hasMany(Product_image::class); 
     }
 
 

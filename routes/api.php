@@ -25,10 +25,12 @@ use Illuminate\Http\Request;
 	Route::post('register', 'AuthController@register');
 	Route::post('login', 'AuthController@login');
 	Route::apiResource('/products','ProductController');
+	 Route::apiResource('/images','ProductImageController');
 
  	Route::group(['prefix' => 'products'], function () {
 	    Route::apiResource('/reviews','ReviewController');
  	    Route::apiResource('/categories','CategoryController');
+ 	   
     });
 
 	
