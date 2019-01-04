@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Model\Category;
 use Illuminate\Http\Request;
+use App\Http\Resources\CategoryResource;
+use App\Http\Requests\StoreCategory;
 
 class CategoryController extends Controller
 {
@@ -14,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return CategoryResource::collection(Category::all());
     }
 
     /**
@@ -33,9 +35,25 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCategory $request)
     {
-        //
+            try { 
+
+            $category = new Category;
+            $category->name = $request->name;
+            $category->status = $request->status;
+            $category->save();
+            return response([
+                'data' => new CategoryResource($category)
+            ],201);
+
+
+        }catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -46,7 +64,16 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        try { 
+
+          return new CategoryResource($category);
+
+        }catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -69,7 +96,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+         try { 
+           
+           
+            $category->update($request->all());
+            return response([
+                'data' => new CategoryResource($category)
+            ],201);
+
+        }catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -80,6 +120,16 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        try { 
+
+            $category->delete();
+            return response(null,204);
+
+        }catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

@@ -21,6 +21,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'description' => $this->detail,
             'price' => $this->price,
+            'category_id' => $this->category_id,
             'product_image' =>ProductImagesResource::collection($this->product_image),
             'stock' => $this->stock == 0 ? 'Out of Stock' : $this->stock,
             'discount' =>$this->discount,
