@@ -18,11 +18,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-       // return Product::all();
 
        //return ProductResource::collection(Product::all());
-
-         return ProductResource::collection(Product::all());
+        return new ProductCollection(Product::paginate(10));
     }
 
     /**
@@ -155,4 +153,30 @@ class ProductController extends Controller
 
         
     }
+
+
+    /**
+     * get category wise productData.
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+
+    public function catProduct(Request $request, $id)
+    {
+        try { 
+            return new ProductCollection(Product::where('category_id',$id)->paginate(10));
+
+        }catch (\Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        
+    }
+
+
+
 }

@@ -30,6 +30,8 @@ use Illuminate\Http\Request;
  	Route::group(['prefix' => 'product'], function () {
 	    Route::apiResource('/reviews','ReviewController');
  	    Route::apiResource('/categories','CategoryController');
+
+ 	    Route::get('cat/{id}', 'ProductController@catProduct');
  	   
     });
 
